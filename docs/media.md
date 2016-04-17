@@ -1,10 +1,12 @@
 # media
 
-**media** is an easy way how to define media queries.
+**media** provides an easy way how to define media queries.
 
 - **[Examples](#examples)**
 - **[Options](#options)**
 - **[API](#api)**
+	- **[media](#api)**
+	- **[media-query](#media-query)**
 - **[Shorthands](#shorthands)**
 - **[Custom queries](#custom-queries)**
 - **[Notable behavior](#notable-behavior)**
@@ -66,11 +68,11 @@ utilus.media = {
 	orientations: 'landscape' 'portrait',
 	modes: 'fullscreen' 'standalone' 'minimal-ui' 'browser',
 	flags: 'color' 'color-index' 'monochrome' 'grid',
+	scans: 'progressive' 'interlace',
 	reductor: {
 		'px': 1, 'em': 0.1, 'rem': 0.1, 'ex': 0.1, 'pt': 0.1,
 		'pc': 0.1, 'in': 0.1, 'mm': 0.1, 'cm': 0.1, 'ch': 0.1
-	},
-	scans: 'progressive' 'interlace'
+	}
 }
 ```
 
@@ -91,7 +93,7 @@ Parses rules into a valid media query and assigns all styles from `{block}` to i
 
 #### queryName
 
-Use a predefined query by passing its name. See [Custom queries documentation](#custom-queries).
+Use a predefined query by passing its name. See [custom queries](#custom-queries).
 
 #### rules
 
@@ -99,23 +101,54 @@ A string (has to be a string, not a list of idents) of short and concise rules t
 
 Available rules and flags are:
 
-- `{mediaType}` - Set the **media type**. Has to be the 1st rule. Media types: `all`, `braille`, `handheld`, `print`, `projection`, `screen`, `tty`, `tv`, `embossed`, `speech`, `3d-glasses`
-- `device` - Use the **device** queries in all consecutive rules. `min-width` becomes `min-device-width`).
-- `{sign}{size}` - Set min|max|equal `>|<|=` **width** to `{size}`. Example: `>960px` => `(min-width: 960px)`
-- `w{sign}{size}` - Same as above, but explicit for **width**. Example: `w>960px` => `(min-width: 960px)`
-- `h{sign}{size}` - Same as above, but explicit for **height**. Example: `h>960px` => `(min-height: 960px)`
-- `{sign}{n}/{n}` - Set min|max|equal `>|<|=` **aspect-ratio** to `{n}/{n}`. Example: `>1/1` => `(min-aspect-ratio: 1/1)`
-- `{sign}{resolution}` - Set min|max|equal `>|<|=` **resolution** to `{resolution}`. Resolution units are: `dpi`, `dpcm`, `dppx`. Example: `>2dppx` => `(min-resolution: 2dppx)`, which is the new syntax for old `(min-device-pixel-ratio: 2)`
-- `{orientation}` - Set the **orientation**. Orientations: `landscape`, `portrait`
-- `{displayMode}` - Set the **display-mode**. Modes: `fullscreen`, `standalone`, `minimal-ui`, `browser`
-- `{scan}` - Set a **scan type**. Scan types: `progressive`, `interlace`
-- `{flag}` - Enable a flag. Flags: `color`, `color-index`, `monochrome`, `grid`
-- `color{sign}{num}` - Set the min|max|equal `>|<|=` number of bits per color component of the output device. Example: `color>4` => `(min-color: 4)`
-- `color-index{sign}{num}` - Set the min|max|equal `>|<|=` number of entries in the color look-up table for the output device. Example: `color-index>256` => `(min-color-index: 256)`
+- ***media type*** : `{mediaType}`
+	- Has to be the 1st rule, or 1st rule after `or`.
+	- Available: `all`, `braille`, `handheld`, `print`, `projection`, `screen`, `tty`, `tv`, `embossed`, `speech`, `3d-glasses`
+	Example: `screen <480px or print` becomes `screen and (max-width: 479px), print`
+- ***device*** : `device`
+	- Turns on the use of **device** queries in all consecutive rules.
+	- Example: `>20px device <400pz` becomes `(min-width: 20px) and (max-device-width: 399px)`.
+- **width** : `{sign}{size}` or `w{sign}{size}`
+	- `{sign}` can be `>|<|=` for min, max, and equal query.
+	- `{size}` can be any CSS length unit.
+	- Example: `>960px` becomes `(min-width: 960px)`
+- **height** : `h{sign}{size}`
+	- `{sign}` can be `>|<|=` for min, max, and equal query.
+	- `{size}` can be any CSS length unit.
+	- Example: `>480px` becomes `(min-height: 480px)`
+- **aspect-ratio** : `{sign}{n}/{n}`
+	- `{sign}` can be `>|<|=` for min, max, and equal query.
+	- Example: `>1/1` becomes `(min-aspect-ratio: 1/1)`
+- **resolution** : `{sign}{resolution}`
+	- `{sign}` can be `>|<|=` for min, max, and equal query.
+	- `{resolution}` can be in `dpi`, `dpcm`, `dppx`
+	- Example: `>2dppx` becomes `(min-resolution: 2dppx)`, the new syntax for `(min-device-pixel-ratio: 2)`
+- **orientation** : `{orientation}`
+	- Available: `landscape`, `portrait`
+	- Example: `landscape` becomes `(orientation: landscape)`
+- **display-mode** : `{displayMode}`
+	- Available: `fullscreen`, `standalone`, `minimal-ui`, `browser`
+	- Example: `fullscreen` becomes `(display-mode: fullscreen)`
+- **scan** : `{scan}`
+	- Available: `progressive`, `interlace`
+	- Example: `progressive` becomes `(scan: progressive)`
+- ***flags*** `{flag}`
+	- Enables a boolean flag.
+	- Available: `color`, `color-index`, `monochrome`, `grid`
+	- Example: `monochrome` becomes `(monochrome)`
+- **color** : `color{sign}{num}`
+	- Sets the number of bits per color component of the output device.
+	- `{sign}` can be `>|<|=` for min, max, and equal query.
+	- Example: `color>4` becomes `(min-color: 4)`
+- **color-index** : `color-index{sign}{num}`
+	- Sets the number of entries in the color look-up table for the output device.
+	- `{sign}` can be `>|<|=` for min, max, and equal query.
+	- Example: `color-index>256` becomes `(min-color-index: 256)`
 
 Operators:
 
 - `or` - All rules are joind with `and`, this splits the `and` groups by comma, effectively creating an `or` logic.
+	Example: `screen <480px or print` becomes `screen and (max-width: 479px), print`
 
 Example query with ALL rules defined:
 
@@ -127,7 +160,7 @@ Example query with ALL rules defined:
 ### media-query
 
 ```styl
-query = media-query(rules)
+media-query(rules)
 ```
 
 Mixin that parses `rules` and returns a valid media query string. For `rules` documentation see above.
@@ -137,20 +170,20 @@ Mixin that parses `rules` and returns a valid media query string. For `rules` do
 Shorthands that prepend or append their name to the optional rules:
 
 ```styl
-+all([rules]) => +media(rules)
++all([rules])    => +media(rules)
 +screen([rules]) => +media('screen ' + rules)
-+print([rules]) => +media('print ' + rules)
++print([rules])  => +media('print ' + rules)
 
-+above(min) => +media('>{min}')
-+below(max) => +media('<{max}')
-+between(min, max) => +media('>{min} <{max}')
++above(min)       => +media('>{min}')
++below(max)       => +media('<{max}')
++between(min max) => +media('>{min} <{max}')
 
 +landscape([rules]) => +media(rules + ' landscape')
-+portrait([rules]) => +media(rules + ' portrait')
++portrait([rules])  => +media(rules + ' portrait')
 
-+fullscreen([rules]) => +media(rules + ' fullscreen')
++fullscreen([rules])  => +media(rules + ' fullscreen')
 +aspect-ration(ratio) => +media(ratio)
-+resolution(rules) => +media(rules)
++resolution(res)      => +media(res)
 ```
 
 Shorthands `+all()`, `+aspect-ratio()`, and `+resolution()` are just an aliases of `+media()`, but might provide more descriptive declarations if you're just setting that one property. For example:

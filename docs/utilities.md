@@ -2,13 +2,15 @@
 
 List of helpful mixins that come with **utilus**.
 
-- **[clockhand](#clockhand)**
-- **[easing](#easing)**
-- **[flatten](#flatten)**
-- **[scale](#scale)**
-- **[golden-ratio](#golden-ratio)**
-- **[parse-fraction](#parse-fraction)**
-- **[flatten](#flatten)**
+- [clockhand](#clockhand)
+- [easing](#easing)
+- [flatten](#flatten)
+- [scale](#scale)
+- [golden-ratio](#golden-ratio)
+- [parse-fraction](#parse-fraction)
+- [flatten](#flatten)
+
+---
 
 ### clockhand
 
@@ -16,7 +18,7 @@ List of helpful mixins that come with **utilus**.
 clockhand(values, [propertyName], [sides], [propertyProperty])
 ```
 
-Internal mixin to implement clockhand underscore omission syntax to various properties. This was completely stolen from amazing [`clockhand-stylus`](https://www.npmjs.com/package/clockhand-stylus) by [Jason Rose-Kuhrt](https://github.com/jasonkuhrt). He since removed the repo from github, so I can't link to that.
+Internal mixin to implement clockhand underscore omission syntax to various properties. This was completely stolen and a bit adapted from amazing [`clockhand-stylus`](https://www.npmjs.com/package/clockhand-stylus) by [Jason Rose-Kuhrt](https://github.com/jasonkuhrt). He since removed the repo from github, so I can't link to that. Needless to say this is the best solution to this problem I've seen, so I'm not gonna reinvent the wheel here :)
 
 The clockhand works exactly the same as shorthand margin declaration:
 
@@ -45,14 +47,14 @@ The mixin is than used to add this kind of syntax to all properties that would b
 
 - `margin`
 - `padding`
-- [`absolute`])(extensions.md#absolute-fixed-relative) - custom prop
-- [`fixed`])(extensions.md#absolute-fixed-relative) - custom prop
-- [`relative`])(extensions.md#absolute-fixed-relative) - custom prop
+- [`absolute`](extensions.md#absolutefixedrelative) - custom prop
+- [`fixed`](extensions.md#absolutefixedrelative) - custom prop
+- [`relative`](extensions.md#absolutefixedrelative) - custom prop
 
 ### easing
 
 ```styl
-easing(opacity)
+easing(name)
 ```
 
 Returns a cubic-bezier matching the easing name. Available easing types are defined in `utilus.easing`:
@@ -97,7 +99,7 @@ transition: all 300ms cubic-bezier(0.55, 0.085, 0.68, 0.53)
 ### flatten
 
 ```styl
-flatten(list, [listN]...)
+flatten(list, ...[listN])
 ```
 
 Flatten passed lists into a single flat list. This is essential when doing fancy stuff like passing arguments between function, as stylus has currently a nasty set of issues with that ([#2150](https://github.com/stylus/stylus/issues/2150)).
@@ -183,4 +185,4 @@ width: rem(720px)
 	width: rem(360px)
 ```
 
-In the example above we have responsive styles that respect the user's root font size browser setting at the same time.
+In the example above we have responsive styles, and respect the user's root font size browser setting at the same time.

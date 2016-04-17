@@ -2,7 +2,18 @@
 
 List of extensions to current CSS properties.
 
-- **[clear](#clear)**
+- [clear](#clear)
+- [color](#color)
+- [font-size](#font-size)
+- [margin](#margin)
+- [overflow](#overflow)
+- [padding](#padding)
+- [position](#position)
+- [absolute|fixed|relative](#absolute|fixed|relative)
+- [size|min-size|max-size](#sizemin-sizemax-size)
+- [visibility](#visibility)
+
+---
 
 ### clear
 
@@ -158,7 +169,7 @@ min-size: width [height] [!important]
 max-size: width [height] [!important]
 ```
 
-New property that defines both `(min|max-)width` and `(min|max-)height` in a single line. When **height** is omitted, it assumes **width** value.  Example:
+Shorthand to appl both `(min|max-)width` and `(min|max-)height` in a single line. When **height** is omitted, it assumes **width** value.  Example:
 
 ```styl
 size: 100px

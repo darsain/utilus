@@ -107,11 +107,17 @@ So in this call:
 flexgrid: main 6 columns -rtl
 ```
 
-The `main` keyword extends a new grid object from `main` predefined grid, and `6 columns rtl` overrides some of the options of this new grid object.
+The `main` keyword extends a new grid object from `main` predefined grid, and `6 columns -rtl` overrides some of the options of this new grid object.
 
 ## Goals
 
+#### No wrapper elements
+
+The main idea behind **flexgrid** is to not touch the border-box of any item, whether it is the container or items within it. All items are positioned with flexbox, gutters and offsets sized with margins, and items sized with width. That, combined with `box-sizing: border-box` on all elements means you have the whole border-box of every item to your disposal, allowing you to use and style it as a normal content element. This is impossible in other grid systems that create gutters with paddings or invisible borders, thus requiring unnecessary nesting and markup pollution.
+
 #### Configurable
+
+Almost every aspect of a grids is easily configurable on grid to grid basis:
 
 - No gutters, gutters around, gutters between.
 - Responsively sized columns by default.
@@ -121,10 +127,6 @@ The `main` keyword extends a new grid object from `main` predefined grid, and `6
 - Support for rtl layout with a flag.
 - Define custom grids, and than just call them, or extend from them without having to redefine them.
 - Create a nested grids with responsive gutters, and let **flexgrid** take care of the math in the background.
-
-#### No wrapper elements
-
-The main idea behind **flexgrid** is to not touch the border-box of any item, whether it is the container or items within it. All items are positioned with flexbox, gutters and offsets sized with margins, and items sized with width. That, combined with `box-sizing: border-box` on all elements means you have the whole border-box of every item to your disposal, allowing you to use and style it as a normal content element. This is impossible in other grid systems that create gutters with paddings or invisible borders, thus requiring unnecessary nesting and markup pollution.
 
 #### Semantic styling
 
@@ -212,8 +214,8 @@ Global configuration is stored in `utilus.flexgrid` hash and has these defaults:
 ```styl
 utilus.flexgrid = {
 	borderBox: false, // enable if box-sizing is not set to border-box globally
-	ignoredFlags: basic size columns gutter, // internal
-	spacings: around between                 // internal
+	ignoredFlags: 'basic' 'size' 'columns' 'gutter', // internal
+	spacings: 'around' 'between'                     // internal
 	basic: {...},    // basic grid with all default options
 	current: {...}   // current global grid, refers to basic at the start
 }
@@ -281,7 +283,7 @@ Examples:
 ```styl
 flexgrid: 16px gutter around vspaced
 utilus.flexgrid.main = flexgrid-type(16px gutter around vspaced)
-flexgrid: main -vspaced  // extends from main grid, and turns off vertical gutters
+flexgrid: main -vspaced  // extends from main grid, but turns off vertical gutters
 ```
 
 ###### **rtl**
@@ -294,22 +296,21 @@ Boolean flag that enables right to left grid (sets `flex-direction` to `row-reve
 flexgrid-type(...definition...)
 ```
 
-Parses the definition and returns the grid configuration object. For definition spec, see above.
+Parses the definition and returns the grid configuration object. For **definition** spec, see above.
 
 You'd use this to define custom grids, or grid objects to use as optional 2nd arguments in mixins like `span-width()`, `span()`, `offset()`, ... Example:
 
 ```styl
 utilus.flexgrid.custom = flexgrid-type(6 columns 16px gutter around vspaced)
-p(utilus.flexgrid.custom)
-//{
-//	size: 100%,
-//	columns: 6,
-//	gutter: 16px,
-//	spacing: 'around',
-//	sizing: 'static',
-//	vspaced: true,
-//	rtl: false
-//}
+p(utilus.flexgrid.custom) => {
+	size: 100%,
+	columns: 6,
+	gutter: 16px,
+	spacing: 'around',
+	sizing: 'static',
+	vspaced: true,
+	rtl: false
+}
 ```
 
 ### flexgrid-current
@@ -318,9 +319,7 @@ p(utilus.flexgrid.custom)
 flexgrid-current(...definition...)
 ```
 
-Sets the current global grid used by mixins such ash `span-width()`, `span()`, `offset()`.
-
-All it does is:
+Uses `flexgrid-type()` to parse the **definition** and sets it as the `utilus.flexgrid.current` global grid used by mixins such as `span:` and `offset:`. So all it does is:
 
 ```styl
 utilus.flexgrid.current = flexgrid-type(...definition...)
@@ -332,12 +331,12 @@ utilus.flexgrid.current = flexgrid-type(...definition...)
 span: fraction [grid]
 ```
 
-Calculates an item width for current global grid, or custom grid when passed as 2nd argument.
+Calculates an item width for `utilus.flexgrid.current` grid, or custom grid when passed as 2nd argument.
 
 - **fraction** - Full fraction notation, such as `1/12`, which describes that item should span 1 out of 12 available columns.
-- **grid** - Grid to calculate item span for. Can be: string of a custom grid name, or grid object generated by `flexgrid-type()`. By default `utilus.flexgrid.current` grid is used.
+- **[grid]** - Grid to calculate item span for. Can be: string with custom grid name, or grid object generated by `flexgrid-type()`. By default `utilus.flexgrid.current` grid is used.
 
-The fraction is evaluated into a raw floating number, so `6/12`, `1/2`, and `0.5` are all equivalent and valid **fraction** values. The `6/12` notation is recommended as it clearly describes what is happening.
+The fraction is evaluated into a raw floating number, so `6/12`, `1/2`, and `0.5` are all equivalent and valid **fraction** values, thought the `6/12` notation is recommended as it clearly describes what is happening.
 
 Examples:
 
@@ -396,7 +395,7 @@ utilus.flexgrid.basic = {
 	columns: 12,
 	gutter: false,
 	spacing: 'around',  // ignored when no gutter
-	sizing: 'relative', // ignored when no gutter, and determined automatically
+	sizing: 'relative', // ignored when no gutter, and determined automatically by gutter unit
 	vspaced: false,
 	rtl: false
 }
@@ -477,20 +476,21 @@ utilus.flexgrid.responsive = flexgrid-type(12 columns 2% gutter around)
 .parent-grid
 	flexgrid: responsive
 
-	> .child-grid
+	> .parent-item-but-also-child-grid
 		// span 6 out of 12 columns within parent grid
 		span: 6/12
 
-		// current
+		// What is happening here:
+		// `current`
 		//   Will extend the nested grid from current global grid, which is the
 		//   grid defined by previous flexgrid call. this is so we don't have
 		//   to redefine things that should stay the same, such as 2% gutter.
-		// span-width(6/12) size
+		// `span-width(6/12) size`
 		//   span-width() calculates width of an item of a parent grid,
-		//   which is also the size of this nested grid
-		// 6 columns
+		//   which defines the size of this nested grid
+		// `6 columns`
 		//   Adjusts the number of max columns available in nested grid.
-		// gutter between
+		// `gutter between`
 		//   Use between gutter placement to seamlessly blend with the
 		//   parent grid.
 		flexgrid: current span-width(6/12) size 6 columns gutter between
@@ -504,13 +504,13 @@ utilus.flexgrid.responsive = flexgrid-type(12 columns 2% gutter around)
 		// If the parent grid is defined as a custom grid called `responsive`:
 		flexgrid: responsive span-width(6/12 responsive) size 6 columns gutter between
 
-		> .child-grid-item
+		> .child-item
 			span: 3/6 // note the use of 6 as max columns number now
 ```
 
 ## Limitations
 
-A few, but there are some limitation.
+A few, but there are some.
 
 #### What not to touch
 
@@ -518,7 +518,7 @@ You can't touch padding of a grid containing element, and margins & width of gri
 
 Width is defined by `span` mixin, and margins by gutters, `vspaced` flag and `offset` mixin.
 
-Apart of that, go crazy!
+Apart of that, the border-boxes are yours!
 
 #### Gutter between behavior
 
@@ -528,6 +528,6 @@ This means that if all of the available columns of the grid row are not filled w
 
 Also, if size of a 1st item in a row is smaller or equal to the sum of all gutters of a previous row (remember - empty space), it will jump up the row to fill it up.
 
-I've tried many different solutions to this, other ways how to style this type of grid without these issues, but they all required breaking the rule of not touching border-boxes. Doing so would render such elements not viable for full styling, and/or made nesting a nightmare, so they were cast off.
+I've tried many different solutions to this, other ways how to style this type of grid without these issues, but they all required breaking the rule of not touching border-boxes. Doing so would render such elements not viable for full styling, and/or made nesting a nightmare.
 
 Honestly, this limitation is quite an edge case that isn't that bothersome, and will be fixed as soon as flexbox spec to control gutters lands in majority of browsers.
