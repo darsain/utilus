@@ -27,6 +27,63 @@ Or only the modules you are interested in:
 @require 'utilus/flexgrid'
 ```
 
+## Examples
+
+Comfy flexible grid system:
+
+```styl
+.container
+	// define a custom grid for this element
+	flexgrid: 12 columns 16px gutter around
+
+	.item
+		span: 4/12    // span item 4 out of 12 columns
+		offset: 4/12  // offset item 4 out of 12 columns
+
+// save a custom grid
+utilus.flexgrid.main = flexgrid-type(12 columns 16px gutter around)
+
+.container
+	// and use later
+	flexgrid: main
+	// or use with some adjustmenst
+	flexgrid: main gutter between
+```
+
+Easy media queries:
+
+```styl
++media('screen <480px')
+	color: red
+
+// or with a shorthand
++screen('<480px')
+	color: red
+
+// or save custom query
+utilus.media.mobile = media-query('screen <480px')
+// and use later
++media('mobile')
+	color: red
+```
+
+Tons of utility functions and CSS extensions:
+
+```styl
+clear: fix          // output clearfix
+size: 100px         // set width & height to 100px
+size: 100px 60px    // set width to 100px and height to 60px
+margin: 5px _ 10px  // set top and bottom margin with underscore omission syntax
+padding: 5px _ 10px // set top and bottom padding with underscore omission syntax
+position: cover     // cover the parent relative element
+position: center    // center within parent relative element
+absolute: 5px _ _ 10px // position: absolute, top: 5px, left: 10px
+overflow: ellipsis  // text ellipsis overflow
+transition: all 300ms easing('in-quad') // easy easing references
+width: rem(100px)   // style in `px` and respect the user browser settings at the same time
+// and more!
+```
+
 ## Documentation
 
 [Documentation](https://github.com/darsain/utilus/docs) is located in the `/docs` folder.
