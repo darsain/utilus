@@ -42,6 +42,22 @@ media-query-ands(definition)
 		// media type
 		else if arg in utilus.media.types
 			push(query, unquote(arg))
+		// height & width
+		else if result = match('(w|h)?(>|<|=)?([0-9.]+(px|em|rem|ex|pt|pc|in|mm|cm|ch))', arg)
+			dim = result[1] is 'h' ? height : width
+			prefix = media-minmax-prefix(result[2])
+			reductor = utilus.media.reductor
+			reductor = reductor[result[4]] if type(reductor) is 'object'
+			size = result[2] is '<' ? convert(result[3]) - reductor : convert(result[3])
+			push(query, '(%s%s%s: %s)' % (prefix device dim size))
+		// aspect-ratio
+		else if result = match('(>|<|=)?(\d/\d)', arg)
+			prefix = media-minmax-prefix(result[1])
+			push(query, '(%s%saspect-ratio: %s)' % (prefix device unquote(result[2])))
+		// resolution
+		else if result = match('(>|<|=)?([0-9.]+(?:dpi|dpcm|dppx))', arg)
+			prefix = media-minmax-prefix(result[1])
+			push(query, '(%sresolution: %s)' % (prefix unquote(result[2])))
 		// orientation
 		else if arg in utilus.media.orientations
 			push(query, '(orientation: %s)' % unquote(arg))
@@ -54,22 +70,6 @@ media-query-ands(definition)
 		// flags such as (color), etc
 		else if arg in utilus.media.flags
 			push(query, '(%s)' % unquote(arg))
-		// aspect-ratio
-		else if result = match('(>|<|=)?(\d/\d)', arg)
-			prefix = media-minmax-prefix(result[1])
-			push(query, '(%s%saspect-ratio: %s)' % (prefix device unquote(result[2])))
-		// height & width
-		else if result = match('(w|h)?(>|<|=)?([0-9.]+(px|em|rem|ex|pt|pc|in|mm|cm|ch))', arg)
-			dim = result[1] is 'h' ? height : width
-			prefix = media-minmax-prefix(result[2])
-			reductor = utilus.media.reductor
-			reductor = reductor[result[4]] if type(reductor) is 'object'
-			size = result[2] is '<' ? convert(result[3]) - reductor : convert(result[3])
-			push(query, '(%s%s%s: %s)' % (prefix device dim size))
-		// resolution
-		else if result = match('(>|<|=)?([0-9.]+(?:dpi|dpcm|dppx))', arg)
-			prefix = media-minmax-prefix(result[1])
-			push(query, '(%sresolution: %s)' % (prefix unquote(result[2])))
 		// color
 		else if result = match('color(>|<|=)([0-9])', arg)
 			prefix = media-minmax-prefix(result[1])
