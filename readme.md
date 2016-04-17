@@ -31,11 +31,11 @@ Or only the modules you are interested in:
 
 [Documentation](https://github.com/darsain/utilus/docs) is located in the `/docs` folder.
 
-- **[Options](https://github.com/darsain/utilus/docs/options.md)** - All **utilus** options.
-- **[Flexgrid](https://github.com/darsain/utilus/docs/flexgrid.md)** - Flexible grid based on flexbox and `calc()`.
-- **[Media queries](https://github.com/darsain/utilus/docs/media.md)** - Comfy media queries.
-- **[CSS extensions](https://github.com/darsain/utilus/docs/extensions.md)** - Extended and new CSS properties.
-- **[Utilities](https://github.com/darsain/utilus/docs/utilities.md)** - Helper mixins and plugins.
+- **[Options](https://github.com/darsain/utilus/blob/master/docs/options.md)** - All **utilus** options.
+- **[Flexgrid](https://github.com/darsain/utilus/blob/master/docs/flexgrid.md)** - Flexible grid based on flexbox and `calc()`.
+- **[Media queries](https://github.com/darsain/utilus/blob/master/docs/media.md)** - Comfy media queries.
+- **[CSS extensions](https://github.com/darsain/utilus/blob/master/docs/extensions.md)** - Extended and new CSS properties.
+- **[Utilities](https://github.com/darsain/utilus/blob/master/docs/utilities.md)** - Helper mixins and plugins.
 
 [List of available modules](https://github.com/darsain/utilus/utilus) is located in the `/utilus` folder.
 
