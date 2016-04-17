@@ -46,7 +46,7 @@ utilus.flexgrid.main = flexgrid-type(12 columns 16px gutter around)
 .container
 	// and use later
 	flexgrid: main
-	// or use with some adjustmenst
+	// or use with some adjustments
 	flexgrid: main gutter between
 ```
 
