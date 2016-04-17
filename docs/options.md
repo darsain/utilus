@@ -14,6 +14,19 @@ utilus.rootFontSize = 16px
 // most sensible people these days set border-box sizing globally
 // on all elements, so this is irrelevant in 99% of the cases
 utilus.flexgrid.borderBox = false
+
+// to prevent media query collisions, media module makes all max-(width|height)
+// queries exclusive by subtracting the last unit from them:
+//   +media('<600px') // => (max-width: 599px)
+//   +media('<60rem') // => (max-width: 59.9rem)
+// you can control the reduction amounts with this reductor object
+// to turn this behavior off, set the the whole reductor property to `0`
+//   utilus.media.reductor = 0
+utilus.media.reductor = {
+	'px': 1, 'em': 0.1, 'rem': 0.1, 'ex': 0.1, 'pt': 0.1,
+	'pc': 0.1, 'in': 0.1, 'mm': 0.1, 'cm': 0.1, 'ch': 0.1
+}
+
 ```
 
 As you can see, there is not much need for configuration in **utilus**. If something has configurable behavior, you define it in mixin calls, just as you would when using CSS properties. For example, you don't spam global variables to define your grid:
