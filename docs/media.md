@@ -5,8 +5,8 @@
 - **[Examples](#examples)**
 - **[Options](#options)**
 - **[API](#api)**
-	- **[media](#api)**
-	- **[media-query](#media-query)**
+	- [media](#api)
+	- [media-query](#media-query)
 - **[Shorthands](#shorthands)**
 - **[Custom queries](#custom-queries)**
 - **[Notable behavior](#notable-behavior)**
@@ -148,9 +148,9 @@ Available rules and flags are:
 Operators:
 
 - `or` - All rules are joind with `and`, this splits the `and` groups by comma, effectively creating an `or` logic.
-	Example: `screen <480px or print` becomes `screen and (max-width: 479px), print`
+	- Example: `screen <480px or print` becomes `screen and (max-width: 479px), print`
 
-Example query with ALL rules defined:
+Example query with all available rules:
 
 ```styl
 +media('screen device >960px <1200px h>480px >1/1 >2dppx landscape fullscreen progressive color color-index monochrome grid color>4 color-index>256')

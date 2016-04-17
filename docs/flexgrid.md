@@ -1,6 +1,6 @@
 # flexgrid
 
-**flexgrid** is a configurable grid system based on flexbox ([94% global support](http://caniuse.com/#search=flexbox) as of Apr 2016) and `calc()` ([93% global support](http://caniuse.com/#search=calc) as of Apr 2016).
+**flexgrid** is a configurable grid system based on flexbox and `calc()` ([flexbox 94%](http://caniuse.com/#search=flexbox) and [calc() 93%](http://caniuse.com/#search=calc) global support as of Apr 2016).
 
 - **[Examples](#examples)**
 - **[Goals](#goals)**
