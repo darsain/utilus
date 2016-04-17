@@ -1,0 +1,135 @@
+@require './flatten'
+
+utilus = {} unless utilus is defined
+utilus.media = {
+	types: 'all' 'braille' 'handheld' 'print' 'projection' 'screen' 'tty' 'tv' 'embossed' 'speech' '3d-glasses',
+	orientations: 'landscape' 'portrait',
+	modes: 'fullscreen' 'standalone' 'minimal-ui' 'browser',
+	flags: 'color' 'color-index' 'monochrome' 'grid',
+	reductor: {
+		'px': 1, 'em': 0.1, 'rem': 0.1, 'ex': 0.1, 'pt': 0.1,
+		'pc': 0.1, 'in': 0.1, 'mm': 0.1, 'cm': 0.1, 'ch': 0.1
+	},
+	scans: 'progressive' 'interlace'
+}
+
+// Outputs @media query out of a definition string.
+media(definition)
+	query = definition in utilus.media ? utilus.media[definition] : media-query(definition)
+	@media query
+		{block}
+
+// Parses definition string into a valid @media query.
+media-query(definition)
+	queries = split(' or ', definition)
+
+	// map to valid queries
+	for query, i in queries
+		queries[i] = media-query-ands(query)
+
+	return unquote(join(', ', queries))
+
+// Parses only the `and` definition groups into a valid @media query.
+media-query-ands(definition)
+	args = split(' ', definition)
+	query = ()
+	device = null
+
+	for arg in args
+		// enable device dimensions
+		if arg is 'device'
+			device = device-
+		// media type
+		else if arg in utilus.media.types
+			push(query, unquote(arg))
+		// orientation
+		else if arg in utilus.media.orientations
+			push(query, '(orientation: %s)' % unquote(arg))
+		// display mode
+		else if arg in utilus.media.modes
+			push(query, '(display-mode: %s)' % unquote(arg))
+		// scan
+		else if arg in utilus.media.scans
+			push(query, '(scan: %s)' % unquote(arg))
+		// flags such as (color), etc
+		else if arg in utilus.media.flags
+			push(query, '(%s)' % unquote(arg))
+		// aspect-ratio
+		else if result = match('(>|<|=)?(\d/\d)', arg)
+			prefix = media-minmax-prefix(result[1])
+			push(query, '(%s%saspect-ratio: %s)' % (prefix device unquote(result[2])))
+		// height & width
+		else if result = match('(w|h)?(>|<|=)?([0-9.]+(px|em|rem|ex|pt|pc|in|mm|cm|ch))', arg)
+			dim = result[1] is 'h' ? height : width
+			prefix = media-minmax-prefix(result[2])
+			reductor = utilus.media.reductor
+			reductor = reductor[result[4]] if type(reductor) is 'object'
+			size = result[2] is '<' ? convert(result[3]) - reductor : convert(result[3])
+			push(query, '(%s%s%s: %s)' % (prefix device dim size))
+		// resolution
+		else if result = match('(>|<|=)?([0-9.]+(?:dpi|dpcm|dppx))', arg)
+			prefix = media-minmax-prefix(result[1])
+			push(query, '(%sresolution: %s)' % (prefix unquote(result[2])))
+		// color
+		else if result = match('color(>|<|=)([0-9])', arg)
+			prefix = media-minmax-prefix(result[1])
+			push(query, '(%scolor: %s)' % (prefix unquote(result[2])))
+		// color-index
+		else if result = match('color-index(>|<|=)([0-9])', arg)
+			prefix = media-minmax-prefix(result[1])
+			push(query, '(%scolor-index: %s)' % (prefix unquote(result[2])))
+		else
+			error('Invalid media rule "' + arg + '"')
+
+	return unquote(join(' and ', query)) if length(query) > 0
+
+// Helper function to return min/max prefix based on a sign.
+media-minmax-prefix(sign)
+	return min- if sign is '>'
+	return max- if sign is '<'
+
+// Shorthands.
+// -----------
+
+all = media
+aspect-ratio = media
+resolution = media
+
+above(min)
+	+media('>%s' % min)
+		{block}
+
+below(max)
+	+media('<%s' % max)
+		{block}
+
+between()
+	args = flatten(arguments)
+	minmax = type(args[0]) is 'string' ? split(' ', args[0]) : args
+	+media('>%s <%s' % (unquote(minmax[0]) unquote(minmax[1])))
+		{block}
+
+screen(definition=null)
+	prefix = 'screen'
+	+media(definition ? join('', prefix, definition) : prefix)
+		{block}
+
+print(definition=null)
+	prefix = 'print'
+	+media(definition ? join('', prefix, definition) : prefix)
+		{block}
+
+landscape(definition=null)
+	postfix = 'landscape'
+	+media(definition ? join('', definition, postfix) : postfix)
+		{block}
+
+portrait(definition=null)
+	postfix = 'portrait'
+	+media(definition ? join('', definition, postfix) : postfix)
+		{block}
+
+fullscreen(definition=null)
+	postfix = 'fullscreen'
+	+media(definition ? join('', definition, postfix) : postfix)
+		{block}

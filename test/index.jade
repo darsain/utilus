@@ -1,0 +1,50 @@
+doctype html
+html(lang="en")
+	head
+		meta(charset='utf-8')
+		title Utilus test page
+		link(rel='stylesheet' href='/index.css')
+	body
+		mixin boxes(type)
+			section
+				div(class=type)
+					each val in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+						.item= val
+				div(class=type + '-singleline')
+					each val in [1, 2, 3, 4, 5, 6]
+						.item= val
+				div(class=type + '-nested')
+					each val in [1, 2, 3]
+						if val == 2
+							.item
+								.inner
+									each val in [1, 2, 3]
+										.item= val
+						else
+							.item= val
+				div(class=type + '-wrap')
+					each val in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+						.item= val
+				if type != 'basic'
+					div(class=type + '-wrap-vspaced')
+						each val in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+							.item= val
+
+		h1 Basic
+		+boxes('basic')
+
+		h1 Relative
+
+		h2 gutter around
+		+boxes('relative-around')
+
+		h2 gutter between
+		+boxes('relative-between')
+
+		h1 Static
+
+		h2 gutter around
+		+boxes('static-around')
+
+		h2 gutter between
+		+boxes('static-between')

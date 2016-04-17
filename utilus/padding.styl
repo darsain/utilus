@@ -1,0 +1,8 @@
+@require './clockhand'
+
+// Adds clockhand syntax to padding property
+padding()
+	if _ in arguments
+		clockhand(arguments, 'padding')
+	else
+		padding: arguments

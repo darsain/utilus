@@ -1,0 +1,19 @@
+// Size shorthand for (max/min)width & (max/min)height properties.
+//
+// Examples:
+//   size: 100px      // square 100 x 100
+//   size: 100px 60px // rectangle 100 x 60
+_size(values, prefix=false)
+	prefix = unquote(prefix + '-') if prefix
+	maybeImportant = last(values) is !important ? pop(values) : null
+	{prefix}width: values[0] maybeImportant
+	{prefix}height: last(values) maybeImportant
+
+size()
+	_size(arguments)
+
+min-size()
+	_size(arguments, prefix: 'min')
+
+max-size()
+	_size(arguments, prefix: 'max')

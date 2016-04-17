@@ -1,0 +1,13 @@
+// Clear fix.
+//
+// Example:
+//   clear: fix
+//   clear: both
+clear(type)
+	if type is 'fix'
+		&:after
+			content: ''
+			display: table
+			clear: both
+	else
+		clear: unquote(type)

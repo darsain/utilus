@@ -1,0 +1,198 @@
+@require './flatten'
+@require './parse-fraction'
+
+// config
+utilus = {} unless utilus is defined
+utilus.flexgrid = {
+	borderBox: false, // enable if box-sizing is not set to border-box globally
+	ignoredFlags: 'basic' 'size' 'columns' 'gutter',
+	spacings: 'around' 'between'
+}
+utilus.flexgrid.basic = {
+	size: 100%,
+	columns: 12,
+	gutter: false,
+	spacing: 'around',
+	sizing: 'relative',
+	vspaced: false,
+	rtl: false
+}
+utilus.flexgrid.current = utilus.flexgrid.basic
+
+// Sets current flexgrid and outputs a flexgrid boilerplate.
+//
+// Available flags/configs:
+//   [gridName]    - Use a predefined grid. Has to be the 1st argument.
+//   [size] size   - Set the grid size. Used in nested grids with relative gutters
+//                   to aid calculation of gutters of an inner grid.
+//   [num] columns - Set the number of max columns per row.
+//   [size] gutter [type] - Set the gutter size and/or type.
+//   vspaced      - Adds vertical gutters.
+//   rtl          - Right to left grid.
+//
+// Example calls:
+//   flexgrid() // defaults to flexgrid(basic)
+//   flexgrid(12 columns)
+//   flexgrid: 12 columns
+//
+// Example using all available options:
+//   flexgrid: span-width(6/12) size 6 columns 2% gutter around vspaced rtl
+flexgrid()
+	flexgrid-current(arguments)
+	grid = utilus.flexgrid.current
+
+	box-sizing: border-box if utilus.flexgrid.borderBox
+	display: flex
+	flex-flow: (grid.rtl ? row-reverse : row) wrap
+	justify-content: space-between if grid.spacing is 'between'
+	padding-top: grid.gutter if grid.vspaced
+
+	> *
+		box-sizing: border-box if utilus.flexgrid.borderBox
+		flex: 0 0 auto
+		span: 1/grid.columns
+		offset: 0 if grid.gutter and grid.spacing is 'around'
+		margin-bottom: grid.gutter if grid.vspaced
+
+// Sets the current flexgrid config, but doesn't output the boilerplate.
+flexgrid-current()
+	utilus.flexgrid.current = flexgrid-type(arguments)
+
+// Parses flexgrid arguments and returns a grid config hash.
+// Hash uses `utilus.flexgrid.basic` (or a predefined grid) as default values.
+flexgrid-type()
+	args = flatten(arguments)
+	baseGrid = flexgrid-get-grid(args[0], 'basic')
+	grid = {}
+
+	// extend from baseGrid
+	for prop, value in baseGrid
+		grid[prop] = value
+
+	// stringify potential mixin names
+	for val, i in args
+		args[i] = '%s' % val if type(val) is 'function'
+
+	// walk through and parse idents
+	for val, i in args
+		if type(val) is 'unit' or type(val) is 'boolean'
+			// assign unit to next in line ident name, such as:
+			// 2% gutter => grid.gutter = 2%
+			grid[args[i + 1]] = val
+		else if val in utilus.flexgrid.spacings
+			// assign gutter type
+			grid.spacing = val
+		else if !(val in utilus.flexgrid) and !(val in utilus.flexgrid.ignoredFlags)
+			// treat the remaining idents as flags
+			switch = substr(val, 0, 1) is '-'
+			val = slice(val, 1) if switch
+			grid[val] = switch ? false : true
+
+	// determine gutter sizing type based on gutter unit
+	grid.sizing = !grid.gutter or unit(grid.gutter) is not '%' ? 'static' : 'relative'
+
+	return grid
+
+// unified grid recall
+flexgrid-get-grid(expr=null, fallback='basic')
+	return expr if type(expr) is 'object'
+	name = type(expr) is 'function' ? '%s' % expr : expr
+	return utilus.flexgrid[name] if name in utilus.flexgrid
+	return utilus.flexgrid[fallback]
+
+// Sets the item width.
+//   span: fraction [grid]
+span()
+	width: span-width(arguments)
+
+// Calculates the item span width for current, or custom grid.
+//   width: span-width(fraction, [grid])
+span-width()
+	args = flatten(arguments)
+	grid = flexgrid-get-grid(last(args), 'current')
+	fraction = parse-fraction(args)
+
+	// basic
+	return 100% * fraction if !grid.gutter
+
+	gutterSize = flexgrid-base-gutter-size(grid)
+	itemSize = flexgrid-base-item-size(grid)
+	itemsCovered = grid.columns * fraction
+	guttersCovered = itemsCovered - 1
+	guttersCoveredSize = gutterSize * guttersCovered
+
+	// relative
+	if grid.sizing is 'relative'
+		return itemSize * itemsCovered + gutterSize * guttersCovered
+
+	// static
+	if grid.sizing is 'static'
+		return 'calc(%s * %s + %s)' % (itemSize itemsCovered guttersCoveredSize)
+
+// Calculates base size of an item.
+// Will use current, or custom grid when one is passed.
+flexgrid-base-item-size(grid=null)
+	grid = utilus.flexgrid.current unless grid
+	gutterSize = flexgrid-base-gutter-size(grid)
+	guttersTotal = grid.columns + (grid.spacing is 'around' ? 1 : -1)
+	guttersTotalSize = gutterSize * guttersTotal
+
+	// basic
+	return 100% * fraction if !grid.gutter
+	// relative
+	return (100% - gutterSize * guttersTotal) / grid.columns if grid.sizing is 'relative'
+	// static
+	return '((100% - %s) / %s)' % (guttersTotalSize grid.columns) if grid.sizing is 'static'
+
+// Calculates base size of a gutter.
+// Will use current, or custom grid when one is passed.
+flexgrid-base-gutter-size(grid=null)
+	grid = utilus.flexgrid.current unless grid
+
+	// basic
+	return 0 if !grid.gutter
+	// relative
+	return grid.gutter * (100 / unit(grid.size, '')) if grid.sizing is 'relative'
+	//static
+	return grid.gutter
+
+// Set offset on an item.
+//   offset: fraction [grid]
+//
+// Supported formats:
+//   offset: 1/12  // set offset using current grid
+//   offset: 2/12 flexgrid-type(2% gutter around)  // set offset using custom grid
+offset()
+	args = flatten(arguments)
+	fraction = parse-fraction(args)
+	grid = type(last(args)) is 'object' ? pop(args) : utilus.flexgrid.current
+	side = grid.rtl ? 'right' : 'left'
+	margin-{side}: offset-width(fraction grid)
+
+// Calculate offset width based on current or custom grid when passed.
+//   offset-width(fraction, [grid])
+//
+// Supported calls:
+//   offset-width: 1/12  // calculate using current global grid
+//   offset-width: 1/12 flexgrid-type(2% gutter around) // custom grid
+offset-width()
+	args = flatten(arguments)
+	grid = flexgrid-get-grid(last(args), 'current')
+	fraction = parse-fraction(args)
+
+	// basic
+	return 100% * fraction if !grid.gutter
+
+	gutterSize = flexgrid-base-gutter-size(grid)
+	itemSize = flexgrid-base-item-size(grid)
+	itemsCovered = grid.columns * fraction
+	guttersCovered = itemsCovered + (grid.spacing is 'around' ? 1 : 0)
+	guttersCoveredSize = gutterSize * guttersCovered
+
+	// relative
+	if grid.sizing is 'relative'
+		return itemSize * itemsCovered + guttersCoveredSize
+
+	// static
+	if grid.sizing is 'static'
+		return 'calc(%s * %s + %s)' % (itemSize itemsCovered guttersCoveredSize)

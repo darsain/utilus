@@ -1,0 +1,7 @@
+// Config
+utilus = {} unless utilus is defined
+utilus.rootFontSize = 16px
+
+// Converts pixels to rem based on utilus.rootFontSize.
+rem(px)
+	unit(px / utilus.rootFontSize, 'rem')

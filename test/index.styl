@@ -1,0 +1,164 @@
+@require 'utilus'
+
+html, body
+	margin: 0
+	padding: 0
+	font-family: sans-serif
+
+body
+	padding: 1em 2em 100%
+	text-align: center
+
+h1
+	font-size: 1.4em
+	section + &
+		margin-top: 2em
+h2
+	font-size: 1em
+
+section
+	> div
+		margin: 1em 0
+	div
+		min-height: 20px
+		background: rgba(0,0,0,.05)
+		outline: 1px solid rgba(0,0,0,.1)
+
+	.item
+		font-size: .8rem
+		line-height: 20px
+		text-align: center
+		color: rgba(0,0,0,.5)
+
+item-sizing()
+	if match('nested', selector())
+		gutterSize = utilus.flexgrid.current.gutter
+		> .item:nth-child(2)
+			span: 10/12
+			.inner
+				flexgrid: span-width(10/12) size 10 columns gutterSize gutter between
+				> .item:nth-child(2)
+					span: 4/10
+				> .item:nth-child(3)
+					span: 3/10
+					offset: 2/10
+	else
+		> .item:nth-child(2)
+			span: 4/12
+		> .item:nth-child(4)
+			offset: 2/12
+		> .item:nth-child(5)
+			span: 2/12
+		> .item:nth-child(10)
+			span: 7/12
+
+media-rules()
+	> .item
+		+media('<600px')
+			span: 4/12
+
+.basic
+	flexgrid: basic
+	media-rules()
+
+.basic-singleline
+	flexgrid: basic
+	item-sizing()
+
+.basic-nested
+	flexgrid: basic
+	item-sizing()
+	.inner
+		flexgrid: basic
+		item-sizing()
+
+.basic-wrap
+	flexgrid: basic wrap
+	item-sizing()
+
+
+utilus.flexgrid.relative = flexgrid-type(2% gutter)
+utilus.flexgrid.static = flexgrid-type(16px gutter)
+
+.relative-around
+	flexgrid: relative gutter around
+	media-rules()
+
+.relative-around-singleline
+	flexgrid: relative gutter around
+	item-sizing()
+
+.relative-around-nested
+	flexgrid: relative gutter around
+	item-sizing()
+
+.relative-around-wrap
+	flexgrid: relative gutter around wrap
+	item-sizing()
+
+.relative-around-wrap-vspaced
+	flexgrid: relative gutter around wrap vspaced
+	item-sizing()
+
+
+.relative-between
+	flexgrid: relative gutter between
+	media-rules()
+
+.relative-between-singleline
+	flexgrid: relative gutter between
+	item-sizing()
+
+.relative-between-nested
+	flexgrid: relative gutter between
+	item-sizing()
+
+.relative-between-wrap
+	flexgrid: relative gutter between wrap
+	item-sizing()
+
+.relative-between-wrap-vspaced
+	flexgrid: relative gutter between wrap vspaced
+	item-sizing()
+
+
+.static-around
+	flexgrid: static gutter around
+	media-rules()
+
+.static-around-singleline
+	flexgrid: static gutter around
+	item-sizing()
+
+.static-around-nested
+	flexgrid: static gutter around
+	item-sizing()
+
+.static-around-wrap
+	flexgrid: static gutter around wrap
+	item-sizing()
+
+.static-around-wrap-vspaced
+	flexgrid: static gutter around wrap vspaced
+	item-sizing()
+
+
+.static-between
+	flexgrid: static gutter between
+	media-rules()
+
+.static-between-singleline
+	flexgrid: static gutter between
+	item-sizing()
+
+.static-between-nested
+	flexgrid: static gutter between
+	item-sizing()
+
+.static-between-wrap
+	flexgrid: static gutter between wrap
+	item-sizing()
+
+.static-between-wrap-vspaced
+	flexgrid: static gutter between wrap vspaced
+	item-sizing()

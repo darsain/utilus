@@ -1,0 +1,37 @@
+{
+  "name": "utilus",
+  "version": "1.0.0",
+  "description": "Stylus utilities.",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib",
+    "plugin",
+    "utilus",
+    "utilus.styl"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darsain/utilus.git"
+  },
+  "keywords": [
+    "stylus",
+    "plugin"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/darsain/utilus/issues"
+  },
+  "homepage": "https://github.com/darsain/utilus#readme",
+  "devDependencies": {
+    "browser-sync": "^2.11.2",
+    "del": "^2.2.0",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-stylus": "^2.3.1"
+  }
+}

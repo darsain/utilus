@@ -1,0 +1,57 @@
+// Clockwise position expansion with omissions.
+// Stolen and adapted from: https://github.com/jasonkuhrt/clockhand-stylus
+//
+// Examples:
+//
+//   .foo
+//     // basic
+//     clockhand(1)
+//     clockhand(1 2)
+//     clockhand(1 2 3)
+//     clockhand(1 2 3 4)
+//
+//     // custom property
+//     clockhand(1, 'bar')
+//
+//     // omissions
+//     clockhand(_ 2)
+//     clockhand(1 _ 3)
+//     clockhand(1 2 _ 4)
+//
+// Yields:
+//
+//   .foo {
+//     // basic
+//     top: 1; right: 1; bottom: 1; left: 1;
+//     top: 1; right: 2; bottom: 1; left: 2;
+//     top: 1; right: 2; bottom: 3; left: 2;
+//     top: 1; right: 2; bottom: 3; left: 4;
+//
+//     // custom property
+//     bar-top: 1; bar-right: 1; bar-bottom: 1; bar-left: 1;
+//
+//     // omissions
+//     right: 2; left: 2;
+//     top: 1; bottom: 3;
+//     top: 1; right: 2; left: 4;
+//   }
+clockhand(values, propertyName='', sides=(top right bottom left), propertyProperty='')
+	if typeof(propertyName) isnt 'string'
+		error('propertyName must be a string, but got ' + propertyName + ' as a ' + type-of(propertyName))
+
+	propertyName = unquote(propertyName + '-') if propertyName
+	propertyProperty = unquote('-' + propertyProperty) if propertyProperty
+	maybeImportant = last(values) is !important ? pop(values) : null
+	valuesPattern = clockhandPatternsLookup[length(values) - 1]
+
+	for i in 0..3
+		value = values[valuesPattern[i]]
+		side = sides[i]
+		{propertyName}{side}{propertyProperty}: value maybeImportant if value isnt _
+
+// Variable for shorthand pattern lookup where the four numbers
+// follow clockhand: top right bottom left
+//
+// input:                (1)       (1 2)     (1 2 3)   (1 2 3 4)
+// side assigned:        (1 1 1 1) (1 2 1 2) (1 2 3 2) (1 2 3 4)
+clockhandPatternsLookup = ((0 0 0 0) (0 1 0 1) (0 1 2 1) (0 1 2 3))

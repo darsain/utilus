@@ -1,0 +1,34 @@
+@import './clockhand'
+
+// Extra position values.
+//
+// Examples:
+//   position: cover   // covers the parent element
+//   position: center  // centered within parent element
+position(args...)
+	if args[0] is 'cover'
+		absolute: 0 _ _ 0
+		size: 100%
+	else if args[0] is 'center'
+		absolute: 50% _ _ 50%
+		transform: translate(-50%, -50%)
+	else
+		position: args
+
+// Position shorthands.
+//
+// Examples:
+//   absolute: 0 _ _ 0
+//   fixed: 10 20
+//   relative: 10 20 0
+absolute()
+	position: absolute
+	clockhand(arguments)
+
+fixed()
+	position: fixed
+	clockhand(arguments)
+
+relative()
+	position: relative
+	clockhand(arguments)

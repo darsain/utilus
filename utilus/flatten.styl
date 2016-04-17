@@ -1,0 +1,11 @@
+// Load flatten plugin.
+//
+// This plugin is absolutely essential if you want to be using arguments lists,
+// as the random nesting issues there (https://github.com/stylus/stylus/issues/2150)
+// render these lists unusable without flattening.
+//
+// Usage example:
+//   foo() // do not use `args...` here, many issues, see #2150
+//     args = flatten(arguments)
+unless lookup('flatten')
+	use('../plugin/flatten.js')

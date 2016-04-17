@@ -1,0 +1,17 @@
+// Special shorthands for overflow property.
+//
+// Examples:
+//   overflow: auto
+//   overflow: hidden
+//   overflow: ellipsis
+//   overflow: ellipsis left
+overflow(type, dir='right')
+	if type == ellipsis
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+		if dir is 'left'
+			direction: rtl
+			text-align: right
+	else
+		overflow: unquote(type)

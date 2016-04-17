@@ -1,0 +1,19 @@
+// Load parse-fraction plugin.
+//
+// This plugin provides a unified fraction evaluation for different mixin calls,
+// as the arguments list in these cases differs:
+//
+//   fraction(args...)
+//      p(args)
+//
+//   fraction(1/2)   => 0.5
+//   fraction('1/2') => '1/2'
+//   fraction: 1/2   => (1 / 2)
+//
+// With parse-fraction, all of the examples above return `0.5`:
+//
+//   parse-fraction(1/2)   => 0.5
+//   parse-fraction('1/2') => 0.5
+//   parse-fraction: 1/2   => 0.5
+unless lookup('parse-fraction')
+	use('../plugin/parse-fraction.js')
