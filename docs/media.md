@@ -89,11 +89,11 @@ The `reductor` is also useful for controlling [query collisions](#query-collisio
 	{block}
 ```
 
-Parses rules into a valid media query and assigns all styles from `{block}` to it.
+Uses **queryName**, or parses rules into a valid media query and assigns all styles from `{block}` to it.
 
 #### queryName
 
-Use a predefined query by passing its name. See [custom queries](#custom-queries).
+Name of a predefined media query. See [custom queries](#custom-queries).
 
 #### rules
 
@@ -186,7 +186,7 @@ Shorthands that prepend or append their name to the optional rules:
 +resolution(res)      => +media(res)
 ```
 
-Shorthands `+all()`, `+aspect-ratio()`, and `+resolution()` are just an aliases of `+media()`, but might provide more descriptive declarations if you're just setting that one property. For example:
+Shorthands `+all()`, `+aspect-ratio()`, and `+resolution()` are just an aliases of `+media()`, but might provide more descriptive declarations if you're just setting that one rule. For example:
 
 ```styl
 +resolution('>2dppx')
@@ -206,7 +206,7 @@ All queries have to be saved as properties on `utilus.media` object. Example:
 utilus.media.mobile = media-query('<480px')
 ```
 
-You can recall this query by passing a `queryName` instead of `rules` into the `+media()` mixin:
+You can recall this query by passing a **queryName** instead of **rules** into the `+media()` mixin:
 
 ```styl
 +media('mobile')
@@ -215,16 +215,16 @@ You can recall this query by passing a `queryName` instead of `rules` into the `
 
 ## Query collisions
 
-If you have 2 rules like this:
+If you have 2 media queries like this:
 
 ```styl
 +media('<480px')
 +media('>480px')
 ```
 
-The rules will collide when the page width is precisely `480px`.
+They will collide when the page width is precisely `480px`.
 
-To prevent this, **media** automatically adjust the `max-(width|height)` values to be exclusive, similar to array slicing arguments. This behavior affects only **width** and **height** queries.
+To prevent this, **media** automatically adjust the `<480px` (`max-(width|height)`) values to be *exclusive*, similar to array slicing arguments. This behavior affects only **width** and **height** rules.
 
 `px` units are reduced by `1`, while other units are reduced by `0.1`. In practice, this means:
 

@@ -28,7 +28,7 @@ margin: top horizontal bottom
 margin: vertical horizontal
 ```
 
-But adds the mission combinations by allowing you to skip specific sides with underscore.
+But adds the missing combinations by allowing you to skip specific sides with underscore.
 
 ```styl
 margin: [top|_] [right|_] [bottom|_] [left|_]

@@ -169,7 +169,7 @@ min-size: width [height] [!important]
 max-size: width [height] [!important]
 ```
 
-Shorthand to appl both `(min|max-)width` and `(min|max-)height` in a single line. When **height** is omitted, it assumes **width** value.  Example:
+Shorthand to apply both `(min|max-)width` and `(min|max-)height` in a single line. When **height** is omitted, it assumes **width** value.  Example:
 
 ```styl
 size: 100px
