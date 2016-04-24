@@ -62,6 +62,7 @@ Easy media queries:
 
 // or save custom query
 utilus.media.mobile = media-query('screen <480px')
+
 // and use later
 +media('mobile')
 	color: red
@@ -86,7 +87,7 @@ width: rem(100px)   // style in `px` and respect the user browser settings at th
 
 ## Documentation
 
-[Documentation](https://github.com/darsain/utilus/docs) is located in the `/docs` folder.
+[Documentation](https://github.com/darsain/utilus/blob/master/docs) is located in the `/docs` folder.
 
 - **[Options](https://github.com/darsain/utilus/blob/master/docs/options.md)** - All **utilus** options.
 - **[Flexgrid](https://github.com/darsain/utilus/blob/master/docs/flexgrid.md)** - Flexible grid based on flexbox and `calc()`.
@@ -94,7 +95,7 @@ width: rem(100px)   // style in `px` and respect the user browser settings at th
 - **[CSS extensions](https://github.com/darsain/utilus/blob/master/docs/extensions.md)** - Extended and new CSS properties.
 - **[Utilities](https://github.com/darsain/utilus/blob/master/docs/utilities.md)** - Helper mixins and plugins.
 
-[List of available modules](https://github.com/darsain/utilus/utilus) is located in the `/utilus` folder.
+[List of available modules](https://github.com/darsain/utilus/blob/master/utilus) is located in the `/utilus` folder.
 
 ## License
 
