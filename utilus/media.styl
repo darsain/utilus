@@ -91,7 +91,10 @@ media-minmax-prefix(sign)
 // Shorthands.
 // -----------
 
-all = media
+all(definition)
+	+media(definition)
+		{block}
+
 aspect-ratio = media
 resolution = media
 
