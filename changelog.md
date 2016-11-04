@@ -1,5 +1,9 @@
 # Changelog
 
+##### **1.0.3** :: 04th Nov 2016
+
+- Fixed `all()` media shorthand changing `all` keywords to `media`.
+
 ##### **1.0.2** :: 24th Apr 2016
 
 Documentation and readme tweaks. Bumping just to get it on npm.

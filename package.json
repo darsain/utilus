@@ -1,6 +1,6 @@
 {
   "name": "utilus",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Stylus utilities.",
   "main": "index.js",
   "files": [
