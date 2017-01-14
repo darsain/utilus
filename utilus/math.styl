@@ -1,7 +1,7 @@
 // Modular scale of a number.
-scale(base, ratio, step=1)
+modular-scale(base, ratio, step=1)
 	base * (ratio ** step)
 
 // Scale of a number by golden ratio.
 golden-ratio(base, step=1)
-	scale(base, 1.618, step)
+	mod-scale(base, 1.618, step)

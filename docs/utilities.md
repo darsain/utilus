@@ -5,7 +5,7 @@ List of helpful mixins that come with **utilus**.
 - [clockhand](#clockhand)
 - [easing](#easing)
 - [flatten](#flatten)
-- [scale](#scale)
+- [modular-scale](#modular-scale)
 - [golden-ratio](#golden-ratio)
 - [parse-fraction](#parse-fraction)
 - [flatten](#flatten)
@@ -112,18 +112,18 @@ foo()
 	args = flatten(arguments)
 ```
 
-### scale
+### modular-scale
 
 ```styl
-scale(base, ratio, [step])
+modular-scale(base, ratio, [step])
 ```
 
 Modular scale of a number. Example:
 
 ```styl
 font-size: 16px
-font-size: scale(@font-size, 1.5)
-font-size: scale(@font-size, 1.5, 2)
+font-size: modular-scale(@font-size, 1.5)
+font-size: modular-scale(@font-size, 1.5, 2)
 // expands to
 font-size: 16px
 font-size: 24px
