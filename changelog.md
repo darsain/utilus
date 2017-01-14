@@ -1,5 +1,9 @@
 # Changelog
 
+##### **2.0.0** :: 12th Jan 2017
+
+- Renamed `scale()` to `modular-scale()` since it was conflicting with `transform: scale()` function.
+
 ##### **1.0.3** :: 04th Nov 2016
 
 - Fixed `all()` media shorthand changing `all` keywords to `media`.
