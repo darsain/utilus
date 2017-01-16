@@ -91,6 +91,8 @@ overflow: hidden
 text-overflow: ellipsis
 ```
 
+Optional `[left]` flag will make the ellipsis cut the text off from the left side.
+
 ```styl
 overflow: ellipsis left
 // expands to
@@ -98,7 +100,7 @@ white-space: nowrap
 overflow: hidden
 text-overflow: ellipsis
 direction: rtl
-text-align: right
+text-align: left
 ```
 
 ### padding
