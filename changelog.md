@@ -1,5 +1,9 @@
 # Changelog
 
+##### **2.0.1** :: 16th Jan 2017
+
+- Fixed `overflow: ellipsis left` alignin the text to the right side.
+
 ##### **2.0.0** :: 12th Jan 2017
 
 - Renamed `scale()` to `modular-scale()` since it was conflicting with `transform: scale()` function.
